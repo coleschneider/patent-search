@@ -1,0 +1,131 @@
+import * as React from 'react'
+import styled from 'styled-components'
+import { Route } from 'react-router'
+
+import { media } from '../theme/Grid/config'
+import Search from './Search/Search'
+import CompanyPage from './CompanyPage/CompanyPage'
+import useGlobalState from '../hooks/useGlobalState/useGlobalState'
+import useCompanies from '../hooks/useCompanies/useCompanies'
+
+const Main = styled.main`
+  -webkit-box-flex: 1;
+  -webkit-box-direction: normal;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: flex;
+  align-items: stretch;
+  box-sizing: border-box;
+  flex-direction: column;
+  flex-basis: 0%;
+  position: relative;
+  flex-shrink: 1;
+  flex-grow: 1;
+  border-width: 0px;
+  border-style: solid;
+  border-color: black;
+  border-image: initial;
+  margin: 0px;
+  padding: 0px;
+`
+const Wrapper = styled.div`
+  -webkit-box-flex: 1;
+  -webkit-box-direction: normal;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: flex;
+  align-items: stretch;
+  box-sizing: border-box;
+  flex-direction: column;
+  flex-basis: 0%;
+  flex-shrink: 0;
+  position: relative;
+  background-color: rgb(230, 236, 240);
+  backface-visibility: hidden;
+  flex-grow: 1;
+  border-width: 0px;
+  border-style: solid;
+  border-color: black;
+  border-image: initial;
+  margin: 0px;
+  padding: 0px;
+`
+const Container = styled.div`
+  ${media.md`
+  width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  `}
+  -webkit-box-flex: 1;
+  -webkit-box-direction: normal;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  align-items: stretch;
+  box-sizing: border-box;
+  display: flex;
+  flex-basis: auto;
+  flex-direction: row;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 0;
+  min-height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  flex-grow: 1;
+  border-width: 0px;
+  border-style: solid;
+  border-color: black;
+  border-image: initial;
+  margin: 10px 0px 0px;
+  padding: 0px 10px;
+`
+
+const SecondaryColumn = styled.div`
+  align-items: stretch;
+  box-sizing: border-box;
+  flex-direction: column;
+  flex-basis: 0%;
+  flex-shrink: 0;
+  position: relative;
+  backface-visibility: hidden;
+  display: none;
+  width: 360px;
+  border-width: 0px;
+  border-style: solid;
+  border-color: black;
+  border-image: initial;
+  margin: 0px 20px;
+  padding: 0px;
+  ${media.md`
+    display: block;
+  `}
+`
+
+const PrimaryColumn = styled.div`
+  z-index: 1;
+  width: 100%;
+  background-color: rgb(255, 255, 255);
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 600px;
+  min-height: 100vh;
+`
+export const CompanyContext = useGlobalState(useCompanies)
+export default function App() {
+  return (
+    <CompanyContext.Provider>
+      <Main>
+        <Wrapper>
+          <Container>
+            <PrimaryColumn>
+              <Route exact path="/" component={Search} />
+              <Route path="/:company" component={CompanyPage} />
+            </PrimaryColumn>
+            <SecondaryColumn>
+              <h3>Put something here to show on desktop vi</h3>
+            </SecondaryColumn>
+          </Container>
+        </Wrapper>
+      </Main>
+    </CompanyContext.Provider>
+  )
+}
