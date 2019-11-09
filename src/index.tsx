@@ -6,8 +6,8 @@ import App from './components/App'
 import * as serviceWorker from './serviceWorker'
 
 ReactDOM.render(
-  <Router>
-      <App />
+  <Router basename={process.env.PUBLIC_URL}>
+    <App />
   </Router>,
   document.getElementById('root'),
 )
