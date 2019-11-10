@@ -14,9 +14,8 @@ type Props = RouteComponentProps<{ company: string }>
 function Search(props: Props) {
   const [currentQuery, setQuery] = React.useState('')
   const { getCompaniesByName, state } = CompanyContext()
-  const { companies } = state
+  const { companies, companySearches } = state
   const { isFetching, assignees, page, count } = companies
-  console.log(state)
   const firstName = useInput('Cole', {
     validations: [lengthValidation, testValidation],
   })
@@ -29,17 +28,14 @@ function Search(props: Props) {
 
   const onSubmit = async ({ values, errors }) => {
     setQuery(values.company)
-    await fetchData(values.company)
+    await getCompaniesByName(values.company, page)
   }
   const form = useForm({ firstName, lastName, company }, onSubmit)
 
-  const fetchData = async (name: string, pageNum = 1) => {
-    if (isFetching) return
-    await getCompaniesByName(name, pageNum)
-  }
   const onGoPage = (num: number) => {
     fetchData(currentQuery, num)
   }
+  console.log(state)
   return (
     <>
       <form>
