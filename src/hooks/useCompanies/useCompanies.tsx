@@ -212,7 +212,7 @@ function useCompanies() {
       type: FETCH_PATENTS_ERROR,
       error,
     })
-  const getPatentsByCompany = async (companyUrl: string, search: string, page = 1) => {
+  const getPatentsByCompany = async (companyUrl: string, search: string, page: number) => {
     fetchPatents(companyUrl, search, page)
     try {
       const { data } = await companyPatents(search, page)

@@ -85,11 +85,11 @@ const query = (company: string) => ({
   ],
 })
 // o
-const options = {
+const options = (page: number) => ({
   per_page: 25,
   matched_subentities_only: false,
-  page: 1,
-}
+  page,
+})
 // s
 const sort = [
   {
@@ -108,7 +108,7 @@ export const companyPatents = (company: string, page: number) =>
     {
       params: {
         q: query(company),
-        o: JSON.stringify(options),
+        o: JSON.stringify(options(page)),
         s: JSON.stringify(sort),
       },
     },
