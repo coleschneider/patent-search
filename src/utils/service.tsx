@@ -90,6 +90,11 @@ const options = (page: number) => ({
   matched_subentities_only: false,
   page,
 })
+const optionsTwo = (page: number) => ({
+  per_page: 10000,
+  matched_subentities_only: false,
+  page,
+})
 // s
 const sort = [
   {
@@ -110,6 +115,19 @@ export const companyPatents = (company: string, page: number) =>
         q: query(company),
         o: JSON.stringify(options(page)),
         s: JSON.stringify(sort),
+        f: JSON.stringify(fields),
+      },
+    },
+  )
+export const companyPatentsLimit = (company: string, page: number) =>
+  axios.get<ChartersSearchResponse>(
+    `https://cors-anywhere.herokuapp.com/http://webapi.patentsview.org/api/patents/query`,
+    {
+      params: {
+        q: query(company),
+        o: JSON.stringify(optionsTwo(page)),
+        s: JSON.stringify(sort),
+        f: JSON.stringify(fields),
       },
     },
   )

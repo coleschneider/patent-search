@@ -1,12 +1,22 @@
 import React from 'react'
 import * as _ from 'lodash'
 import { RouteComponentProps } from 'react-router'
+import styled from 'styled-components'
 import { companyPatents } from '../../utils/service'
 import Patent from '../Patent/Patent'
 import Spinner from '../Spinner/Spinner'
 import { CompanyContext } from '../App'
 import { LoadMore } from '../CompanyList/CompanyList'
+import download from '../../utils/download'
 
+const CompanyTitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 1.2rem;
+  font-size: 1.2rem;
+  border-bottom: 1px solid rgb(230, 236, 240);
+`
 function CompanyPage(props: RouteComponentProps<{ company: string }>) {
   const { state, getPatentsByCompany, patentsByCompany, getPatentById } = CompanyContext()
   const companyUrl = props.match.url.substring(1)
@@ -28,7 +38,15 @@ function CompanyPage(props: RouteComponentProps<{ company: string }>) {
 
   return (
     <div>
-      <h1>{isFirstFetch ? `Fetching patent data for ${company}'s profile` : `Company - ${company}`}</h1>
+      <CompanyTitleContainer>
+        <h3>{isFirstFetch ? `Fetching patent data for ${company}'s profile` : `Company - ${company}`}</h3>
+        <i
+          style={{ cursor: 'pointer' }}
+          className="fa fa-file-excel-o"
+          aria-hidden="true"
+          onClick={() => download('test', company)}
+        />
+      </CompanyTitleContainer>
       {patents ? patents.map(patent => <Patent key={patent.patent_id} {...patent} />) : null}
       {companyPatents.isFetching && <Spinner />}
       {!isFirstFetch && (
