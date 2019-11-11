@@ -40,7 +40,7 @@ function CompanyList(props: Props) {
       </div>
     )
   }
-  console.log(state)
+
   return (
     <>
       {companies.map((data, i) => (

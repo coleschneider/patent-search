@@ -61,7 +61,6 @@ const paginate = ({ types, mapActionToKey }: Paginate) => {
       case successType:
       case failureType:
         const key = mapActionToKey(action)
-        console.log(key)
         if (typeof key !== 'string') {
           throw new Error('expecteed key to be a string')
         }
@@ -100,10 +99,7 @@ const patentSchema = new schema.Entity(
 )
 const companySearchesReducer = paginate({
   types: [FETCH_COMPANIES, FETCH_COMPANIES_COMPLETE, FETCH_COMPANIES_ERROR],
-  mapActionToKey: (actionType: Actions) => {
-    console.log(actionType)
-    return actionType.meta.search
-  },
+  mapActionToKey: (actionType: Actions) => actionType.meta.search,
 })
 
 const patentsByCompanyReducer = paginate({
