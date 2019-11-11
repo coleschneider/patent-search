@@ -49,6 +49,8 @@ async function download(filename, company: string) {
   // const workbookPayload = data.patents.map(patent => {
   //   return _.omit<Patent>(patent, ['applications', 'cpcs', 'nbers', 'inventors', 'gov_interests', 'assignees', 'uspcs'])
   // })
+  const t0 = performance.now()
+
   const workbookPayload = data.patents.map(patent => {
     const applications = patent.applications.reduce((acc, curr, index) => {
       const { app_date, app_id } = curr
@@ -159,7 +161,8 @@ async function download(filename, company: string) {
       ...inventors,
     }
   })
-
+  const t1 = performance.now()
+  console.log(`Call to workPayload took ${t1 - t0} milliseconds.`)
   wb.Props = {
     Title: `${company} Patents`,
     Subject: 'Test',
