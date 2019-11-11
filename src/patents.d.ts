@@ -16,9 +16,9 @@ interface PatentsById {
   patent_id: string
 }
 
-interface CompanyPaginationConfig {
+interface PaginationConfig {
   count: number
-  total_assignee_count: number
+  total: number
   page: number
 }
 
@@ -110,18 +110,19 @@ interface PayloadedActionMeta<T, P, M> {
   payload: P
   meta: M
 }
-interface PayloadedError<T> {
+interface PayloadedError<T, M> {
   type: T
   errors: any
+  meta: M
 }
 
-interface CompanyState extends CompanyPaginationConfig {
-  assignees: AssigneedDetails[] | null
+interface CompanyState extends PaginationConfig {
+  ids: never[]
   isFetching: boolean
   errors: any
 }
-interface ChartersState extends CharterPaginationConfig {
-  patents: Patent[] | null
+interface PatentState extends PaginationConfig {
+  ids: never[]
   isFetching: boolean
   errors: any
 }
@@ -162,8 +163,8 @@ type CompanyActionTypes = {
 // Company Actions
 type FetchCompanies = ActionMeta<FETCH_COMPANIES, Pagination>
 type FetchCompaniesComplete = PayloadedActionMeta<FETCH_COMPANIES_COMPLETE, CompanySearchResponse, Pagination>
-type FetchCompaniesError = PayloadedError<FETCH_COMPANIES_ERROR>
-type CompanyActions = FetchCompanies | FetchCompaniesComplete | FetchCompaniesError
+type FetchCompaniesError = PayloadedError<FETCH_COMPANIES_ERROR, Pagination>
+type CompanyActions = FetchCompanies | FetchCompaniesComplete
 
 // Patent ActionTypes
 type FETCH_PATENTS = 'FETCH_PATENTS'

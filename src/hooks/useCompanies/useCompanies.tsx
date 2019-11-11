@@ -1,5 +1,6 @@
 import React from 'react'
 import { schema, normalize } from 'normalizr'
+import * as _ from 'lodash'
 import { companySearch, companyPatents } from '../../utils/service'
 
 const { FETCH_COMPANIES, FETCH_COMPANIES_COMPLETE, FETCH_COMPANIES_ERROR }: CompanyActionTypes = {
@@ -60,11 +61,12 @@ const paginate = ({ types, mapActionToKey }: Paginate) => {
         return state
     }
   }
-  return (state = {}, action: Actions) => {
+  return (state: BySearchTerm<CompanyState> | BySearchTerm<PatentState>, action: Actions) => {
     switch (action.type) {
       case requestType:
       case successType:
       case failureType:
+        // eslint-disable-next-line
         const key = mapActionToKey(action)
         if (typeof key !== 'string') {
           throw new Error('expecteed key to be a string')
@@ -114,8 +116,9 @@ const patentsByCompanyReducer = paginate({
 })
 
 function useCompanies() {
-  const entities = (state: EntityState, action: Actions) => {
-    if (action.payload && action.payload.entities) {
+  const entitiesReducer = (state: EntityState, action: Actions) => {
+    // eslint-disable-next-line
+    if (action.hasOwnProperty('payload') && action.payload.entities) {
       return _.merge({}, state, action.payload.entities)
     }
     return state
@@ -131,7 +134,7 @@ function useCompanies() {
     return {
       companySearches: companySearchesReducer(state.companySearches, action),
       patentsByCompany: patentsByCompanyReducer(state.patentsByCompany, action),
-      entities: entities(state.entities, action),
+      entities: entitiesReducer(state.entities, action),
       errorMessage: errorMessage(state.errorMessage, action),
     }
   }
@@ -160,8 +163,12 @@ function useCompanies() {
     })
   const setErrorMessage = (message: string) =>
     dispatch({
-      type: 'SET_ERROR_MESSAGE',
+      type: SET_ERROR_MESSAGE,
       payload: { message },
+    })
+  const clearErrorMessage = () =>
+    dispatch({
+      type: CLEAR_ERROR_MESSAGE,
     })
 
   const getCompaniesByName = async (search: string, page = 1) => {
