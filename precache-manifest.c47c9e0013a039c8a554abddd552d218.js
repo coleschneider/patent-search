@@ -1,19 +1,19 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "9898b9a780c0da9eff4d7170d0b6b3ac",
+    "revision": "6810a37d3906a89d13de677fb60a9fc3",
     "url": "/patent-search/index.html"
   },
   {
-    "revision": "243d60dc35bfacfbf014",
+    "revision": "67ec634b3e47d74ad636",
     "url": "/patent-search/static/css/main.b8efa882.chunk.css"
   },
   {
-    "revision": "74d273a427ddd1039b14",
-    "url": "/patent-search/static/js/2.e953ce26.chunk.js"
+    "revision": "320b146a812ff24d19e9",
+    "url": "/patent-search/static/js/2.dc758e0c.chunk.js"
   },
   {
-    "revision": "243d60dc35bfacfbf014",
-    "url": "/patent-search/static/js/main.96e2a223.chunk.js"
+    "revision": "67ec634b3e47d74ad636",
+    "url": "/patent-search/static/js/main.cb7da8cc.chunk.js"
   },
   {
     "revision": "83647493454ef701c36d",
