@@ -1,12 +1,13 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { Route } from 'react-router'
+import { Route, Switch } from 'react-router-dom'
 
 import { media } from '../theme/Grid/config'
 import Search from './Search/Search'
 import CompanyPage from './CompanyPage/CompanyPage'
 import useGlobalState from '../hooks/useGlobalState/useGlobalState'
 import useCompanies from '../hooks/useCompanies/useCompanies'
+import CompanyList from './CompanyList/CompanyList'
 
 const Main = styled.main`
   -webkit-box-flex: 1;
@@ -117,8 +118,9 @@ export default function App() {
         <Wrapper>
           <Container>
             <PrimaryColumn>
-              <Route exact path="/" component={Search} />
-              <Route path="/:company" component={CompanyPage} />
+              <Route exact path="/:company?" component={Search} />
+              <Route exact path="/:company" component={CompanyList} />
+              <Route exact path="/patents/:company" component={CompanyPage} />
             </PrimaryColumn>
             <SecondaryColumn>
               <h3>Put something here to show on desktop vi</h3>

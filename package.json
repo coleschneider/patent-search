@@ -105,6 +105,7 @@
     "@types/enzyme-to-json": "1.5.3",
     "@types/lodash": "^4.14.146",
     "@types/node": "^12.7.11",
+    "@types/normalizr": "^2.0.18",
     "@types/prettier": "1.16.4",
     "@types/prop-types": "^15.7.3",
     "@typescript-eslint/eslint-plugin": "^2.3.3",
@@ -122,6 +123,7 @@
     "eslint-plugin-react-hooks": "^1.7.0",
     "file-saver": "^2.0.2",
     "invariant": "^2.2.4",
+    "normalizr": "^3.4.1",
     "prettier": "^1.18.2",
     "prettier-eslint": "9.0.0",
     "xlsx": "^0.15.1"

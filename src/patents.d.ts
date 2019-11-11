@@ -132,22 +132,39 @@ type BySearchTerm<T> = {
 }
 interface State {
   companySearches: BySearchTerm<CompanyState>
-  companies: CompanyState
-  charters: ChartersState
+  patentsByCompany: BySearchTerm<PatentState>
 }
 type Pagination = {
   page: number
   search: string
 }
+
+// Company ActionTypes
+type FETCH_COMPANIES = 'FETCH_COMPANIES'
+type FETCH_COMPANIES_COMPLETE = 'FETCH_COMPANIES_COMPLETE'
+type FETCH_COMPANIES_ERROR = 'FETCH_COMPANIES_ERROR'
+type CompanyActionTypesUnion = FETCH_COMPANIES | FETCH_COMPANIES_COMPLETE | FETCH_COMPANIES_ERROR
+type CompanyActionTypes = {
+  [k in CompanyActionTypesUnion]: CompanyActionTypesUnion
+}
+// Patent ActionTypes
+type FETCH_PATENTS = 'FETCH_PATENTS'
+type FETCH_PATENTS_COMPLETE = 'FETCH_PATENTS_COMPLETE'
+type FETCH_PATENTS_ERROR = 'FETCH_PATENTS_ERROR'
+type PatentActionTypesUnion = FETCH_PATENTS | FETCH_PATENTS_COMPLETE | FETCH_PATENTS_ERROR
+type PatentActionTypes = {
+  [k in PatentActionTypesUnion]: PatentActionTypesUnion
+}
+
 // Company Actions
-type FetchCompanies = ActionMeta<'FETCH_COMPANIES', Pagination>
-type FetchCompaniesComplete = PayloadedActionMeta<'FETCH_COMPANIES_COMPLETE', CompanySearchResponse, Pagination>
-type FetchCompaniesError = PayloadedError<'FETCH_COMPANIES_ERROR'>
+type FetchCompanies = ActionMeta<FETCH_COMPANIES, Pagination>
+type FetchCompaniesComplete = PayloadedActionMeta<FETCH_COMPANIES_COMPLETE, CompanySearchResponse, Pagination>
+type FetchCompaniesError = PayloadedError<FETCH_COMPANIES_ERROR>
 type CompanyActions = FetchCompanies | FetchCompaniesComplete | FetchCompaniesError
 // Charter Actions
-type FetchCharters = PayloadedAction<'FETCH_CHARTERS', Pagination>
-type FetchChartersComplete = PayloadedAction<'FETCH_CHARTERS_COMPLETE', ChartersSearchResponse>
-type FetchChartersError = PayloadedError<'FETCH_CHARTERS_ERROR'>
+type FetchPatents = ActionMeta<FETCH_PATENTS, Pagination>
+type FetchPatentsComplete = PayloadedActionMeta<FETCH_PATENTS_COMPLETE, ChartersSearchResponse, Pagination>
+type FetchPatentsError = PayloadedError<FETCH_PATENTS_ERROR>
 type CharterActions = FetchCharters | FetchChartersComplete | FetchChartersError
 
 //  All Actions

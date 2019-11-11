@@ -13,7 +13,7 @@ type FormErrors = {
 interface FormProps {
   [key: string]: ReturnType<typeof useInput>
 }
-const useForm = (inputs: FormProps = {}, onSubmit) => {
+function useForm<T>(inputs: FormProps = {}, onSubmit) {
   const [errors, setErrors] = React.useState<FormValues>({})
   const [values, setValues] = React.useState<FormErrors>({})
 
@@ -38,7 +38,7 @@ const useForm = (inputs: FormProps = {}, onSubmit) => {
   return {
     submit: e => {
       e.preventDefault()
-      onSubmit({ values, errors })
+      onSubmit({ values, errors } as { values: T; errors: any })
     },
     values,
     errors,

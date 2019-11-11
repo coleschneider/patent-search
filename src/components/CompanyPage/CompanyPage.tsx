@@ -6,24 +6,24 @@ import Patent from '../Patent/Patent'
 import Spinner from '../Spinner/Spinner'
 import { CompanyContext } from '../App'
 
-function CompanyPage({ match: { params } }: RouteComponentProps<{ company: string }>) {
-  const { state, getChartersByCompany } = CompanyContext()
-
-  const {
-    charters: { isFetching, patents },
-  } = state
-  const { company } = params
+function CompanyPage(props: RouteComponentProps<{ company: string }>) {
+  const { state, getPatentsByCompany, patentsByCompany, getPatentById } = CompanyContext()
+  const companyUrl = props.match.url.substring(1)
+  const { company } = props.match.params
   React.useEffect(() => {
     const fetchData = async () => {
-      getChartersByCompany(company)
+      getPatentsByCompany(companyUrl, props.match.params.company, 1)
     }
     fetchData()
   }, [])
+  const companyPatents = patentsByCompany(companyUrl)
+  const patents = companyPatents.ids.map(id => getPatentById(id))
 
+  const isFirstFetch = !companyPatents || (companyPatents.isFetching && companyPatents.ids.length === 0)
   return (
     <div>
-      <h1>Company - {company}</h1>
-      {isFetching && <Spinner />}
+      <h1>{isFirstFetch ? `Fetching patent data for ${company}'s profile` : `Company - ${company}`}</h1>
+      {isFirstFetch && <Spinner />}
       {patents ? patents.map(patent => <Patent key={patent.patent_id} {...patent} />) : null}
     </div>
   )

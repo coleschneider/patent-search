@@ -10,32 +10,30 @@ import { testValidation, lengthValidation } from '../../utils/validators'
 import InputContainer from '../Input/Input'
 
 type Props = RouteComponentProps<{ company: string }>
-
+interface FormState {
+  firstName: string
+  lastName: string
+  company: string
+}
 function Search(props: Props) {
-  const [currentQuery, setQuery] = React.useState('')
-  const { getCompaniesByName, state } = CompanyContext()
-  const { companies, companySearches } = state
-  const { isFetching, assignees, page, count } = companies
+  const {
+    match: { params },
+  } = props
   const firstName = useInput('Cole', {
     validations: [lengthValidation, testValidation],
   })
   const lastName = useInput('Schneider', {
     validations: [lengthValidation, testValidation],
   })
-  const company = useInput('salesforce', {
+  const company = useInput(params.company || '', {
     validations: [testValidation],
   })
 
-  const onSubmit = async ({ values, errors }) => {
-    setQuery(values.company)
-    await getCompaniesByName(values.company, page)
+  const onSubmit = async ({ values, errors }: { values: FormState }) => {
+    props.history.push(`/${values.company}`)
   }
-  const form = useForm({ firstName, lastName, company }, onSubmit)
+  const form = useForm<FormState>({ firstName, lastName, company }, onSubmit)
 
-  const onGoPage = (num: number) => {
-    fetchData(currentQuery, num)
-  }
-  console.log(state)
   return (
     <>
       <form>
@@ -50,12 +48,10 @@ function Search(props: Props) {
           <input type="text" value={company.value} onChange={company.onChange} onBlur={company.onBlur} />
         </InputContainer>
 
-        <button disabled={!form.isValid || isFetching} onClick={form.submit} type="submit">
+        <button disabled={!form.isValid} onClick={form.submit} type="submit">
           {form.isValid ? '✅' : '❌'} Submit
         </button>
       </form>
-      <CompanyList isFetching={isFetching} assignees={assignees} {...props} />
-      <Pagination total={count} perPage={25} onGoPage={onGoPage} />
     </>
   )
 }

@@ -21,9 +21,10 @@ const Container = styled.div`
 
 interface Prop extends RouteComponentProps<{ company: string }>, AssigneedDetails {}
 
-function Company({ assignee_organization, history }: Prop) {
+function Company({ assignee_organization, history, match }: Prop) {
+  const company = assignee_organization || match.params.company
   const handleGoCompany = () => {
-    history.push(`/${assignee_organization}`)
+    history.push(`/patents/${company}`)
   }
   return (
     <Wrapper onClick={handleGoCompany}>
