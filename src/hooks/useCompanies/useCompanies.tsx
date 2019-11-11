@@ -12,6 +12,11 @@ const { FETCH_PATENTS, FETCH_PATENTS_COMPLETE, FETCH_PATENTS_ERROR }: PatentActi
   FETCH_PATENTS_COMPLETE: 'FETCH_PATENTS_COMPLETE',
   FETCH_PATENTS_ERROR: 'FETCH_PATENTS_ERROR',
 }
+const { SET_ERROR_MESSAGE, CLEAR_ERROR_MESSAGE }: ErrorMessageActionTypes = {
+  SET_ERROR_MESSAGE: 'SET_ERROR_MESSAGE',
+  CLEAR_ERROR_MESSAGE: 'CLEAR_ERROR_MESSAGE',
+}
+
 interface Paginate {
   types: CompanyActionTypesUnion[] | PatentActionTypesUnion[]
   mapActionToKey: (action: Actions) => string | number
@@ -109,17 +114,16 @@ const patentsByCompanyReducer = paginate({
 })
 
 function useCompanies() {
-  const entities = (state = { companies: {}, patents: {} }, action) => {
+  const entities = (state: EntityState, action: Actions) => {
     if (action.payload && action.payload.entities) {
       return _.merge({}, state, action.payload.entities)
     }
-
     return state
   }
 
-  const errorMessage = (state, action) => {
-    if (action.type === 'SET_ERROR') {
-      return action.message
+  const errorMessage = (state: ErrorMessageState, action: Actions) => {
+    if (action.type === 'SET_ERROR_MESSAGE') {
+      return action.payload.message
     }
     return state
   }
@@ -154,10 +158,10 @@ function useCompanies() {
       type: FETCH_COMPANIES_ERROR,
       errors,
     })
-  const setErrorMessage = (message: any) =>
+  const setErrorMessage = (message: string) =>
     dispatch({
-      type: 'SET_ERROR',
-      message,
+      type: 'SET_ERROR_MESSAGE',
+      payload: { message },
     })
 
   const getCompaniesByName = async (search: string, page = 1) => {
