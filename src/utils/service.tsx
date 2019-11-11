@@ -1,15 +1,5 @@
 import axios from 'axios'
 
-// const baseURL = 'https://cors-anywhere.herokuapp.com/https://developer.uspto.gov'
-// const defaultParams = {
-//   start: 0,
-//   rows: 100,
-//   dateFrom: '2001-01-01',
-//   dateTo: '2019-11-06',
-//   sortOrder: 'asc',
-// }
-// const service = axios.create({ baseURL, params: defaultParams })
-// &f=[
 const fields = [
   'patent_id',
   'patent_title',
@@ -107,31 +97,113 @@ const sort = [
     patent_date: 'desc',
   },
 ]
+
+const proxyUrl = process.env.PROXY_URL
+const api = 'http://webapi.patentsview.org/api'
+const baseURL = `${proxyUrl}/${api}`
+const service = axios.create({
+  baseURL,
+})
 export const companyPatents = (company: string, page: number) =>
-  axios.get<ChartersSearchResponse>(
-    `https://cors-anywhere.herokuapp.com/http://webapi.patentsview.org/api/patents/query`,
-    {
-      params: {
-        q: query(company),
-        o: JSON.stringify(options(page)),
-        s: JSON.stringify(sort),
-        f: JSON.stringify(fields),
-      },
+  service.get<ChartersSearchResponse>(`/patents/query`, {
+    params: {
+      q: query(company),
+      o: JSON.stringify(options(page)),
+      s: JSON.stringify(sort),
+      f: JSON.stringify(fields),
     },
-  )
+  })
 export const companyPatentsLimit = (company: string, page: number) =>
-  axios.get<ChartersSearchResponse>(
-    `https://cors-anywhere.herokuapp.com/http://webapi.patentsview.org/api/patents/query`,
-    {
-      params: {
-        q: query(company),
-        o: JSON.stringify(optionsTwo(page)),
-        s: JSON.stringify(sort),
-        f: JSON.stringify(fields),
-      },
+  service.get<ChartersSearchResponse>(`/patents/query`, {
+    params: {
+      q: query(company),
+      o: JSON.stringify(optionsTwo(page)),
+      s: JSON.stringify(sort),
+      f: JSON.stringify(fields),
     },
-  )
+  })
+
+const companyQuery = (company: string) => ({
+  _and: [
+    {
+      _or: [
+        {
+          _and: [
+            {
+              _contains: {
+                assignee_first_name: `${company}`,
+              },
+            },
+          ],
+        },
+        {
+          _and: [
+            {
+              _contains: {
+                assignee_last_name: `${company}`,
+              },
+            },
+          ],
+        },
+        {
+          _and: [
+            {
+              _contains: {
+                assignee_organization: `${company}`,
+              },
+            },
+          ],
+        },
+      ],
+    },
+    {
+      uspc_sequence: 0,
+    },
+  ],
+})
+const companyOptions = (page: number) => ({
+  per_page: 25,
+  matched_subentities_only: true,
+  sort_by_subentity_counts: 'patent_id',
+  page: `${page}`,
+})
+const companySort = [
+  {
+    patent_id: 'desc',
+  },
+  {
+    assignee_total_num_patents: 'desc',
+  },
+  {
+    assignee_organization: 'asc',
+  },
+  {
+    assignee_last_name: 'asc',
+  },
+  {
+    assignee_first_name: 'asc',
+  },
+]
+const companyFields = [
+  'assignee_id',
+  'assignee_first_name',
+  'assignee_last_name',
+  'assignee_organization',
+  'assignee_lastknown_country',
+  'assignee_lastknown_state',
+  'assignee_lastknown_city',
+  'assignee_lastknown_location_id',
+  'assignee_total_num_patents',
+  'assignee_first_seen_date',
+  'assignee_last_seen_date',
+  'patent_id',
+]
 export const companySearch = (company: string, page: number) =>
-  axios.get<CompanySearchResponse>(
-    `https://cors-anywhere.herokuapp.com/http://webapi.patentsview.org/api/assignees/query?q={"_and":[{"_or":[{"_and":[{"_contains":{"assignee_first_name":"${company}"}}]},{"_and":[{"_contains":{"assignee_last_name":"${company}"}}]},{"_and":[{"_contains":{"assignee_organization":"${company}"}}]}]},{"uspc_sequence":0}]}&f=["assignee_id","assignee_first_name","assignee_last_name","assignee_organization","assignee_lastknown_country","assignee_lastknown_state","assignee_lastknown_city","assignee_lastknown_location_id","assignee_total_num_patents","assignee_first_seen_date","assignee_last_seen_date","patent_id"]&o={"per_page":25,"matched_subentities_only":true,"sort_by_subentity_counts":"patent_id","page":${page}}&s=[{"patent_id":"desc"},{"assignee_total_num_patents":"desc"},{"assignee_organization":"asc"},{"assignee_last_name":"asc"},{"assignee_first_name":"asc"}]`,
-  )
+  service.get<CompanySearchResponse>(`/assignees/query`, {
+    params: {
+      q: JSON.stringify(companyQuery(company)),
+      f: JSON.stringify(companyFields),
+      s: JSON.stringify(companySort),
+      o: JSON.stringify(companyOptions(page)),
+    },
+  })
