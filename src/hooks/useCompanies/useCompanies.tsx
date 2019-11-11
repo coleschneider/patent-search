@@ -78,6 +78,7 @@ const initialState: State = {
   companySearches: {},
   patentsByCompany: {},
   errorMessage: null,
+  entities: { companies: {}, patents: {} },
 }
 const companySchema = new schema.Entity(
   'companies',

@@ -10,10 +10,6 @@ import useCompanies from '../hooks/useCompanies/useCompanies'
 import CompanyList from './CompanyList/CompanyList'
 
 const Main = styled.main`
-  -webkit-box-flex: 1;
-  -webkit-box-direction: normal;
-  -webkit-box-orient: vertical;
-  -webkit-box-align: stretch;
   display: flex;
   align-items: stretch;
   box-sizing: border-box;
@@ -30,10 +26,6 @@ const Main = styled.main`
   padding: 0px;
 `
 const Wrapper = styled.div`
-  -webkit-box-flex: 1;
-  -webkit-box-direction: normal;
-  -webkit-box-orient: vertical;
-  -webkit-box-align: stretch;
   display: flex;
   align-items: stretch;
   box-sizing: border-box;
@@ -57,10 +49,6 @@ const Container = styled.div`
     margin-left: auto;
     margin-right: auto;
   `}
-  -webkit-box-flex: 1;
-  -webkit-box-direction: normal;
-  -webkit-box-orient: horizontal;
-  -webkit-box-align: stretch;
   align-items: stretch;
   box-sizing: border-box;
   display: flex;
