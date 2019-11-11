@@ -18,13 +18,13 @@ to {
 `
 
 const Circle = styled.div`
-  border: 3px solid orangered;
+  border: 3px solid steelblue;
   border-radius: 50%;
-  border-right-color: transparent;
+  border-right-color: rgb(230, 236, 240);
   display: inline-block;
-  width: 50px;
-  height: 50px;
-  animation: 1s linear infinite ${spin};
+  width: 25px;
+  height: 25px;
+  animation: 0.5s linear infinite ${spin};
 `
 
 function Spinner() {
