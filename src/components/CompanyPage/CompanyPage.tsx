@@ -18,13 +18,19 @@ function CompanyPage(props: RouteComponentProps<{ company: string }>) {
   }, [])
   const companyPatents = patentsByCompany(companyUrl)
   const patents = companyPatents.ids.map(id => getPatentById(id))
-
+  const onLoadMore = () => {
+    getPatentsByCompany(companyUrl, props.match.params.company, companyPatents.page + 1)
+  }
+  const totalPages = companyPatents && Math.ceil(companyPatents.total / 25)
   const isFirstFetch = !companyPatents || (companyPatents.isFetching && companyPatents.ids.length === 0)
   return (
     <div>
       <h1>{isFirstFetch ? `Fetching patent data for ${company}'s profile` : `Company - ${company}`}</h1>
       {isFirstFetch && <Spinner />}
       {patents ? patents.map(patent => <Patent key={patent.patent_id} {...patent} />) : null}
+      <button onClick={onLoadMore} disabled={!companyPatents || companyPatents.page === totalPages}>
+        Load More
+      </button>
     </div>
   )
 }
