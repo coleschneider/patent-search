@@ -163,7 +163,7 @@ a {
   flex-direction: column;
 }
 
-input {
+/* input {
   display: block;
   min-width: 90%;
   margin: 1em;
@@ -191,7 +191,7 @@ button {
 button:hover {
   background-color: palevioletred;
   color: white;
-}
+} */
 
 
 ul {

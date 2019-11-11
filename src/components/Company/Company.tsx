@@ -1,6 +1,9 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { RouteComponentProps } from 'react-router'
+import { Link } from 'react-router-dom'
+import Header from '../Collapsible/Header'
+import Collapse from '../Collapsible/Collapse'
 
 const Wrapper = styled.div`
   display: flex;
@@ -19,17 +22,175 @@ const Container = styled.div`
   }
 `
 
+const ContainerAccordion = styled.div`
+  background-color: #fff;
+  border-color: #ddd;
+  border-style: solid;
+  border-width: 0 0 1px;
+  &:last-child {
+    border: 0;
+  }
+`
+const Content = styled.div`
+  padding: 0 15px 15px;
+
+  cursor: pointer;
+  padding: 1rem;
+  background-color: rgb(245, 248, 250);
+`
+const TextWrapper = styled.div`
+  display: flex;
+  align-items: stretch;
+  box-sizing: border-box;
+  flex-basis: auto;
+  flex-direction: column;
+  flex-shrink: 0;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  min-width: 0px;
+  min-height: 0px;
+  position: relative;
+  z-index: 0;
+  pointer-events: auto;
+  margin-top: -1px;
+  border-width: 0px;
+  border-style: solid;
+  border-color: black;
+  border-image: initial;
+`
+const NameWrapper = styled.div`
+  display: flex;
+  align-items: stretch;
+  box-sizing: border-box;
+  flex-basis: auto;
+  flex-shrink: 0;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  min-width: 0px;
+  min-height: 0px;
+  position: relative;
+  z-index: 0;
+  pointer-events: auto;
+  margin-bottom: 2px;
+  justify-content: space-between;
+  flex-direction: row;
+  border-width: 0px;
+  border-style: solid;
+  border-color: black;
+  border-image: initial;
+`
+const ActionWrapper = styled.div`
+  display: flex;
+  align-items: stretch;
+  box-sizing: border-box;
+  flex-basis: auto;
+  flex-shrink: 0;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  min-width: 0px;
+  min-height: 0px;
+  position: relative;
+  z-index: 0;
+  pointer-events: auto;
+  max-width: 425px;
+  margin-top: 9px;
+  justify-content: space-between;
+  flex-direction: row;
+  border-width: 0px;
+  border-style: solid;
+  border-color: black;
+  border-image: initial;
+`
+const DetailsContainer = styled.div`
+  font-weight: 400;
+  color: rgb(20, 23, 26);
+  font-size: 14px;
+  overflow-wrap: break-word;
+  line-height: 1.3125;
+  min-width: 0px;
+  position: relative;
+`
+const Bold = styled.span`
+  font-weight: 800;
+  display: contents;
+`
 interface Prop extends RouteComponentProps<{ company: string }>, AssigneedDetails {}
 
-function Company({ assignee_organization, history, match }: Prop) {
+function Company({
+  assignee_lastknown_country,
+  assignee_last_seen_date,
+  assignee_lastknown_city,
+  assignee_first_seen_date,
+  assignee_total_num_patents,
+  assignee_organization,
+  match,
+  index,
+}: Prop) {
   const company = assignee_organization || match.params.company
-  const handleGoCompany = () => {
-    history.push(`/patents/${company}`)
+  const [isActiveItem, setActiveItem] = React.useState({})
+  const [isActiveIndex, setActiveIndex] = React.useState(null)
+  const allowMultiple = true
+  const toggleItem = index => {
+    if (allowMultiple) {
+      setActiveItem(prevState => ({
+        // https://goo.gl/otnvXd
+        // Allow Multiple collapsible logic: credit to Shubham Khatri https://goo.gl/XVqFNL
+        ...prevState,
+        [index]: !prevState[index],
+      }))
+    }
+    return setActiveIndex(isActiveIndex === index ? null : index)
   }
+  let checkOpen
+  if (allowMultiple) {
+    checkOpen = isActiveItem[index]
+  } else {
+    checkOpen = isActiveIndex === index
+  }
+
   return (
-    <Wrapper onClick={handleGoCompany}>
-      <Container>{assignee_organization}</Container>
-    </Wrapper>
+    <ContainerAccordion>
+      <Header
+        title={assignee_organization}
+        icon="down-chevron"
+        id={index}
+        onClick={toggleItem}
+        isOpen={checkOpen}
+        allowMultiple={allowMultiple}
+      />
+
+      <Collapse isOpen={checkOpen}>
+        <Content>
+          <TextWrapper>
+            <NameWrapper>
+              Company Name: <Bold>{assignee_organization}</Bold>
+            </NameWrapper>
+            <DetailsContainer>{`Location: ${assignee_lastknown_city}, ${assignee_lastknown_country}`}</DetailsContainer>
+            <DetailsContainer>{`First filing: ${assignee_first_seen_date}`}</DetailsContainer>
+            <DetailsContainer>{`Last filing: ${assignee_last_seen_date}`}</DetailsContainer>
+            <DetailsContainer>{`Filings count: ${assignee_total_num_patents}`}</DetailsContainer>
+          </TextWrapper>
+          <ActionWrapper>
+            <Link to={`/patents/${company}/`}>See More</Link>
+          </ActionWrapper>
+        </Content>
+      </Collapse>
+    </ContainerAccordion>
   )
 }
 

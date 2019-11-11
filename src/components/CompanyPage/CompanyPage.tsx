@@ -5,6 +5,7 @@ import { companyPatents } from '../../utils/service'
 import Patent from '../Patent/Patent'
 import Spinner from '../Spinner/Spinner'
 import { CompanyContext } from '../App'
+import { LoadMore } from '../CompanyList/CompanyList'
 
 function CompanyPage(props: RouteComponentProps<{ company: string }>) {
   const { state, getPatentsByCompany, patentsByCompany, getPatentById } = CompanyContext()
@@ -28,9 +29,9 @@ function CompanyPage(props: RouteComponentProps<{ company: string }>) {
       <h1>{isFirstFetch ? `Fetching patent data for ${company}'s profile` : `Company - ${company}`}</h1>
       {patents ? patents.map(patent => <Patent key={patent.patent_id} {...patent} />) : null}
       {companyPatents.isFetching && <Spinner />}
-      <button onClick={onLoadMore} disabled={!companyPatents || companyPatents.page === totalPages}>
+      <LoadMore onClick={onLoadMore} disabled={!companyPatents || companyPatents.page === totalPages}>
         Load More
-      </button>
+      </LoadMore>
     </div>
   )
 }
