@@ -26,8 +26,8 @@ function CompanyPage(props: RouteComponentProps<{ company: string }>) {
   return (
     <div>
       <h1>{isFirstFetch ? `Fetching patent data for ${company}'s profile` : `Company - ${company}`}</h1>
-      {isFirstFetch && <Spinner />}
       {patents ? patents.map(patent => <Patent key={patent.patent_id} {...patent} />) : null}
+      {companyPatents.isFetching && <Spinner />}
       <button onClick={onLoadMore} disabled={!companyPatents || companyPatents.page === totalPages}>
         Load More
       </button>
