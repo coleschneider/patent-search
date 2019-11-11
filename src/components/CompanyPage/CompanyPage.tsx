@@ -12,6 +12,7 @@ function CompanyPage(props: RouteComponentProps<{ company: string }>) {
   const companyUrl = props.match.url.substring(1)
   const { company } = props.match.params
   React.useEffect(() => {
+    window.scroll(0, 0)
     const fetchData = async () => {
       getPatentsByCompany(companyUrl, props.match.params.company, 1)
     }

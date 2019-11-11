@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, useRouteMatch, useLocation } from 'react-router-dom'
 
 import { media } from '../theme/Grid/config'
 import Search from './Search/Search'
@@ -8,6 +8,7 @@ import CompanyPage from './CompanyPage/CompanyPage'
 import useGlobalState from '../hooks/useGlobalState/useGlobalState'
 import useCompanies from '../hooks/useCompanies/useCompanies'
 import CompanyList from './CompanyList/CompanyList'
+import Header from './Header/Header'
 
 const Main = styled.main`
   display: flex;
@@ -22,7 +23,7 @@ const Main = styled.main`
   border-style: solid;
   border-color: black;
   border-image: initial;
-  margin: 0px;
+  margin-top: 100px;
   padding: 0px;
 `
 const Wrapper = styled.div`
@@ -100,8 +101,14 @@ const PrimaryColumn = styled.div`
 `
 export const CompanyContext = useGlobalState(useCompanies)
 export default function App() {
+  const isPatentPage = useRouteMatch({
+    path: '/patents/:company',
+    exact: true,
+  })
+
   return (
     <CompanyContext.Provider>
+      <Header isPatentPage={isPatentPage ? isPatentPage.isExact : false} />
       <Main>
         <Wrapper>
           <Container>
