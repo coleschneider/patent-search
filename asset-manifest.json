@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/patent-search/static/css/main.6c2a9652.chunk.css",
-    "main.js": "/patent-search/static/js/main.7102d503.chunk.js",
+    "main.js": "/patent-search/static/js/main.c7f87d20.chunk.js",
     "runtime-main.js": "/patent-search/static/js/runtime-main.2a307bde.js",
-    "static/js/2.7e0e81e3.chunk.js": "/patent-search/static/js/2.7e0e81e3.chunk.js",
+    "static/js/2.2575eaa0.chunk.js": "/patent-search/static/js/2.2575eaa0.chunk.js",
     "index.html": "/patent-search/index.html",
-    "precache-manifest.95a1e0292db749b94a8b7a18510e4342.js": "/patent-search/precache-manifest.95a1e0292db749b94a8b7a18510e4342.js",
+    "precache-manifest.514f4045014d21ff9257dbf2a41c6c4a.js": "/patent-search/precache-manifest.514f4045014d21ff9257dbf2a41c6c4a.js",
     "service-worker.js": "/patent-search/service-worker.js"
   },
   "entrypoints": [
     "static/js/runtime-main.2a307bde.js",
-    "static/js/2.7e0e81e3.chunk.js",
+    "static/js/2.2575eaa0.chunk.js",
     "static/css/main.6c2a9652.chunk.css",
-    "static/js/main.7102d503.chunk.js"
+    "static/js/main.c7f87d20.chunk.js"
   ]
 }
