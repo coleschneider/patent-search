@@ -1,6 +1,9 @@
 import React from 'react'
-import { animated } from 'react-spring'
+import { animated, AnimatedValue } from 'react-spring'
+
 import styled from 'styled-components'
+
+type OverwriteKeys<A, B> = { [K in keyof A]: K extends keyof B ? B[K] : A[K] }
 
 const Progress_Title = styled.span`
   font-weight: bold;
@@ -59,8 +62,22 @@ const PieChartProgress = ({
 interface IndicatorProps extends ChartProps {
   title: string
   description: string
+  spring: AnimatedValue<
+    Pick<
+      OverwriteKeys<
+        {
+          x: number
+          config: {
+            delay: number
+          }
+        },
+        React.CSSProperties
+      >,
+      'x'
+    >
+  >
 }
-const ProgressIndicator = ({ spring, title, description, progress }: IndicatorProps) => (
+const ProgressIndicator = ({ spring, title, description, ...rest }: IndicatorProps) => (
   <Progress_Wrapper
     style={{
       transform: spring.x.interpolate(y => {
@@ -72,7 +89,7 @@ const ProgressIndicator = ({ spring, title, description, progress }: IndicatorPr
       <Progress_Title>{title}</Progress_Title>
       <Progress_Description>{description}</Progress_Description>
     </Progress_Container>
-    <PieChartProgress progress={progress} />
+    <PieChartProgress {...rest} />
   </Progress_Wrapper>
 )
 

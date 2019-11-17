@@ -137,14 +137,18 @@ type ById<T> = {
   [k: string]: T
 }
 interface EntityState {
-  companies: ById<Company>
-  patents: ById<Patent>
+  companies: {
+    [k: string]: Company
+  }
+  patents: {
+    [k: string]: Patent
+  }
 }
-type ErrorMessageState = string | null
+
 type Paginate = {
   ids: never[]
   isFetching: boolean
-  error: any
+  error: string | null
   page: number
   count: number
   total: number
@@ -155,7 +159,6 @@ type PaginateEntity = {
 interface State {
   companySearches: PaginateEntity
   patentsByCompany: PaginateEntity
-  errorMessage: ErrorMessageState
   entities: EntityState
 }
 type Pagination = {
@@ -170,13 +173,13 @@ type FETCH_COMPANIES_ERROR = 'FETCH_COMPANIES_ERROR'
 type CompanyActionTypesUnion = FETCH_COMPANIES | FETCH_COMPANIES_COMPLETE | FETCH_COMPANIES_ERROR
 
 type CompanyActionTypes = {
-  [k in CompanyActionTypesUnion]: K
+  [k in CompanyActionTypesUnion]: CompanyActionTypesUnion
 }
 // Company Actions
 type FetchCompanies = ActionMeta<FETCH_COMPANIES, Pagination>
 type FetchCompaniesComplete = PayloadedActionMeta<FETCH_COMPANIES_COMPLETE, CompanySearchResponse, Pagination>
 type FetchCompaniesError = PayloadedError<FETCH_COMPANIES_ERROR, Pagination>
-type CompanyActions = FetchCompanies | FetchCompaniesComplete
+type CompanyActions = FetchCompanies | FetchCompaniesComplete | FetchCompaniesError
 
 // Patent ActionTypes
 type FETCH_PATENTS = 'FETCH_PATENTS'
@@ -184,7 +187,7 @@ type FETCH_PATENTS_COMPLETE = 'FETCH_PATENTS_COMPLETE'
 type FETCH_PATENTS_ERROR = 'FETCH_PATENTS_ERROR'
 type PatentActionTypesUnion = FETCH_PATENTS | FETCH_PATENTS_COMPLETE | FETCH_PATENTS_ERROR
 type PatentActionTypes = {
-  [k in PatentActionTypesUnion]: K
+  [k in PatentActionTypesUnion]: PatentActionTypesUnion
 }
 // Patent Actions
 type FetchPatents = ActionMeta<FETCH_PATENTS, Pagination>
@@ -192,19 +195,5 @@ type FetchPatentsComplete = PayloadedActionMeta<FETCH_PATENTS_COMPLETE, Charters
 type FetchPatentsError = PayloadedError<FETCH_PATENTS_ERROR>
 type PatentActions = FetchPatents | FetchPatentsComplete | FetchPatentsError
 
-// Error Message ActionTypes
-type SET_ERROR_MESSAGE = 'SET_ERROR_MESSAGE'
-type CLEAR_ERROR_MESSAGE = 'CLEAR_ERROR_MESSAGE'
-type ErrorMessageActionTypesUnion = SET_ERROR_MESSAGE | CLEAR_ERROR_MESSAGE
-
-type ErrorMessageActionTypes = {
-  [K in ErrorMessageActionTypesUnion]: K
-}
-// Error Message Actions
-
-type SetErrorMessagee = PayloadedAction<SET_ERROR_MESSAGE, { message: string }>
-type ClearErrorMessage = Action<CLEAR_ERROR_MESSAGE>
-type ErrorMessageActions = SetErrorMessagee | ClearErrorMessage
-
 //  All Actions
-type Actions = PatentActions | CompanyActions | ErrorMessageActions
+type Actions = CompanyActions | PatentActions

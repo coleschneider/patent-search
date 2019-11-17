@@ -4,13 +4,8 @@ import styled from 'styled-components'
 import Spinner from '../Spinner/Spinner'
 import Company from '../Company/Company'
 import { CompanyContext } from '../App'
-import useSocket from '../../hooks/useSocket/useSocket'
 import { Messages } from '../../theme/Elements'
 
-interface Props extends RouteComponentProps<{ company: string }> {
-  isFetching: boolean
-  assignees: AssigneedDetails[] | null
-}
 const SpinnerContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -27,26 +22,26 @@ export const LoadMore = styled.button`
 export const MessageText = styled.div`
   margin-right: 1rem;
 `
-function CompanyList(props: Props) {
+function CompanyList(props: RouteComponentProps<{ company: string }>) {
   const {
     match: { params },
   } = props
   const { company } = params
-  const { getCompaniesByNameIfNeeded, getCompaniesByName, profileByCompany, getCompaniesById } = CompanyContext()
+  const { getCompaniesByNameIfNeeded, getCompaniesByName, profileByCompany } = CompanyContext()
 
   React.useEffect(() => {
     getCompaniesByNameIfNeeded(company, 1)
   }, [company])
 
-  const companyProfile = profileByCompany(company)
-  const companies = companyProfile.ids.map(id => getCompaniesById(id))
-  const totalPages = companyProfile && Math.ceil(companyProfile.total / 25)
+  const { companies, error, count, total, isFetching, page } = profileByCompany(company)
+
+  const totalPages = Math.ceil(total / 25)
 
   const handleClick = () => {
-    getCompaniesByName(company, companyProfile.page + 1)
+    getCompaniesByName(company, page + 1)
   }
 
-  if (!companyProfile || (companyProfile.isFetching && companyProfile.ids.length === 0)) {
+  if (isFetching && companies.length === 0) {
     return (
       <Messages.Info>
         <MessageText>
@@ -60,20 +55,17 @@ function CompanyList(props: Props) {
 
   return (
     <>
-      {companyProfile.total && <Messages.Info>Found: {companyProfile.total}</Messages.Info>}
-      {companies.map((data, i) => (
-        <Company index={i} {...data} key={i} {...companyProfile} {...props} />
+      {total && <Messages.Info>Found: {total}</Messages.Info>}
+      {companies.map((data: Company, i: number) => (
+        <Company {...data} key={i} {...data} {...props} />
       ))}
-
-      {companyProfile.isFetching && (
+      {isFetching && (
         <SpinnerContainer>
           <Spinner />
         </SpinnerContainer>
       )}
-
-      {companyProfile.error && <Messages.Error>{companyProfile.error}</Messages.Error>}
-
-      <LoadMore onClick={handleClick} disabled={!companyProfile || companyProfile.page === totalPages}>
+      {error && <Messages.Error>{error}</Messages.Error>}
+      <LoadMore onClick={handleClick} disabled={page === totalPages}>
         Load More
       </LoadMore>
     </>
