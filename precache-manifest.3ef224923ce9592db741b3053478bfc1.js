@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "d29081f04e707ab9d5e7c530cd87bc5b",
+    "revision": "f8fcbb6b2a44085f8df5ae9c13712015",
     "url": "/patent-search/index.html"
   },
   {
