@@ -1,11 +1,11 @@
 {
   "files": {
     "main.css": "/patent-search/static/css/main.a6ba6d55.chunk.css",
-    "main.js": "/patent-search/static/js/main.521d61b8.chunk.js",
+    "main.js": "/patent-search/static/js/main.57525708.chunk.js",
     "runtime-main.js": "/patent-search/static/js/runtime-main.2a307bde.js",
     "static/js/2.1ebbcc58.chunk.js": "/patent-search/static/js/2.1ebbcc58.chunk.js",
     "index.html": "/patent-search/index.html",
-    "precache-manifest.6f4f3e02bc8675f7b95fd14ee972ace8.js": "/patent-search/precache-manifest.6f4f3e02bc8675f7b95fd14ee972ace8.js",
+    "precache-manifest.232ac21a49a9424cccf8e7d2537a0add.js": "/patent-search/precache-manifest.232ac21a49a9424cccf8e7d2537a0add.js",
     "service-worker.js": "/patent-search/service-worker.js",
     "static/media/LeftArrow.a47f10ed.svg": "/patent-search/static/media/LeftArrow.a47f10ed.svg"
   },
@@ -13,6 +13,6 @@
     "static/js/runtime-main.2a307bde.js",
     "static/js/2.1ebbcc58.chunk.js",
     "static/css/main.a6ba6d55.chunk.css",
-    "static/js/main.521d61b8.chunk.js"
+    "static/js/main.57525708.chunk.js"
   ]
 }
