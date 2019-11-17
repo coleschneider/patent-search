@@ -62,10 +62,10 @@ function Search(props: Props) {
   const {
     match: { params },
   } = props
-  const firstName = useInput('Cole', {
+  const firstName = useInput('', {
     validations: [lengthValidation, testValidation],
   })
-  const lastName = useInput('Schneider', {
+  const lastName = useInput('', {
     validations: [lengthValidation, testValidation],
   })
   const company = useInput(params.company || '', {
@@ -78,7 +78,7 @@ function Search(props: Props) {
   const form = useForm<FormState>({ firstName, lastName, company }, onSubmit)
 
   return (
-    <Form onSubmit={form.submit}>
+    <Form>
       <InputContainer input={firstName} label="First Name">
         <Input type="text" value={firstName.value} onChange={firstName.onChange} onBlur={firstName.onBlur} />
       </InputContainer>
@@ -88,7 +88,10 @@ function Search(props: Props) {
       <SearchInput input={company} label="Company">
         <SearchInputText type="text" value={company.value} onChange={company.onChange} onBlur={company.onBlur} />
       </SearchInput>
-      <button type="submit" style={{ display: 'none' }} />
+
+      <button disabled={!form.isValid} onClick={form.submit} type="submit">
+        {form.isValid ? '✅' : '❌'} Submit
+      </button>
     </Form>
   )
 }
