@@ -1,15 +1,12 @@
 import { animated, useSpring } from 'react-spring'
+import { RouteProps, useHistory } from 'react-router-dom'
 import * as React from 'react'
 import styled, { keyframes } from 'styled-components'
-import { RouteProps, useHistory } from 'react-router-dom'
-import { ReactComponent as LeftArrow } from './LeftArrow.svg'
 import { media } from '../../theme/Grid/config'
-import useHeadroom from '../../hooks/useHeadroom/useHeadRoom'
+import { ReactComponent as LeftArrow } from './LeftArrow.svg'
 import NavLinks from './NavLinks'
-// @keyframes nav {
-//   from { opacity: 0; transform: translate3d(0, -25px, 0) }
-//   to { opacity: 1; transform: translate3d(0, 0, 0) }
-// }
+import useHeadroom from '../../hooks/useHeadroom/useHeadRoom'
+
 const nav = keyframes`
   from { opacity: 0; transform: translate3d(0, -25px, 0) }
   to { opacity: 1; transform: translate3d(0, 0, 0) }
@@ -72,21 +69,18 @@ const NavOuter = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  -ms-flex-pack: center;
   justify-content: center;
-  -ms-flex-align: center;
   align-items: center;
 `
 
 const NameContainer = styled.div`
   margin: 0 auto;
   display: block;
-
   max-width: 100%;
   width: 100%;
   ${media.xs`
-  max-width: 1280px;
-  width: 90%;  
+    max-width: 1280px;
+    width: 90%;  
   `}
 `
 const Name = styled.div`
@@ -110,7 +104,7 @@ const BackText = styled.div`
   display: none;
   ${media.sm`
     display: block;
-    `}
+  `}
 `
 interface Props extends RouteProps {
   isPatentPage: boolean

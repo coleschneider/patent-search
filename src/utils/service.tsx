@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const apiEndpoint = process.env.API_ENDPOINT
-const baseURL = `${apiEndpoint}/api`
+export const baseURL = `${apiEndpoint}/api`
 const service = axios.create({
   baseURL,
 })

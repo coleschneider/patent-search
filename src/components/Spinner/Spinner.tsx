@@ -1,15 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import styled, { keyframes } from 'styled-components'
-
-const Container = styled.main`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-family: sans-serif;
-`
 
 const spin = keyframes`
 to {
@@ -28,10 +18,6 @@ const Circle = styled.div`
 `
 
 function Spinner() {
-  return (
-    // <Container>
-    <Circle />
-    // </Container>
-  )
+  return <Circle />
 }
 export default Spinner

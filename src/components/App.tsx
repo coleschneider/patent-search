@@ -1,13 +1,13 @@
+import { Route, useRouteMatch } from 'react-router-dom'
 import * as React from 'react'
 import styled from 'styled-components'
-import { Route, useRouteMatch } from 'react-router-dom'
 import { media } from '../theme/Grid/config'
-import Search from './Search/Search'
-import CompanyPage from './CompanyPage/CompanyPage'
-import useGlobalState from '../hooks/useGlobalState/useGlobalState'
-import useCompanies from '../hooks/useCompanies/useCompanies'
 import CompanyList from './CompanyList/CompanyList'
+import CompanyPage from './CompanyPage/CompanyPage'
 import Header from './Header/Header'
+import Search from './Search/Search'
+import useCompanies from '../hooks/useCompanies/useCompanies'
+import useGlobalState from '../hooks/useGlobalState/useGlobalState'
 
 const Main = styled.main`
   display: flex;
@@ -45,7 +45,7 @@ const Wrapper = styled.div`
 `
 const Container = styled.div`
   ${media.md`
-  width: 1000px;
+    width: 1000px;
     margin-left: auto;
     margin-right: auto;
   `}

@@ -2,14 +2,16 @@ import React from 'react'
 import * as _ from 'lodash'
 import { RouteComponentProps, Route, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
-import { useSpring, animated } from 'react-spring'
+import { useSpring } from 'react-spring'
 import Patent from '../Patent/Patent'
 import Spinner from '../Spinner/Spinner'
+import ProgressIndicator from '../ProgressIndicator/ProgressIndicator'
 import { CompanyContext } from '../App'
 import { LoadMore, MessageText } from '../CompanyList/CompanyList'
 import download from '../../utils/download'
 import { Messages, Bold } from '../../theme/Elements'
 import { Content, TextWrapper, NameWrapper, DetailsContainer } from '../Company/Company'
+import { baseURL } from '../../utils/service'
 
 const CompanyTitleContainer = styled.div`
   display: flex;
@@ -19,47 +21,6 @@ const CompanyTitleContainer = styled.div`
   font-size: 1.2rem;
   border-bottom: 1px solid rgb(230, 236, 240);
 `
-const PieChartProgress = ({
-  spring,
-  progress,
-  outterCircleColor = 'white',
-  innerCircleColor = 'rgba(33,150,243, 0.6)',
-}) => {
-  return (
-    <animated.svg height="60" width="60" viewBox="0 0 24 24">
-      <circle r="12" cx="12" cy="12" fill={outterCircleColor} />
-      <circle
-        r="5"
-        cx="12"
-        cy="12"
-        fill="transparent"
-        stroke={innerCircleColor}
-        strokeWidth="10"
-        strokeDasharray={`calc(${progress || 0} * 31.42 / 100) 31.42`}
-        transform="rotate(-90) translate(-24)"
-        style={{ transition: 'all 0.25s ease-in' }}
-      />
-    </animated.svg>
-  )
-}
-const BatchUploadProgress = ({ spring, active, title, description, progress, className }) => (
-  <animated.div
-    style={{
-      transform: spring.x.interpolate(y => {
-        return `translateX(${y}px)`
-      }),
-    }}
-    className="batch-upload-progress__container"
-  >
-    <React.Fragment>
-      <div className="batch-upload-progress__title-container">
-        <span className="batch-upload-progress__title">{title}</span>
-        <span className="batch-upload-progress__description">{description}</span>
-      </div>
-      <PieChartProgress spring={spring} progress={progress} />
-    </React.Fragment>
-  </animated.div>
-)
 
 const Download = props => {
   const eventSource = React.useRef(null)
@@ -86,7 +47,7 @@ const Download = props => {
       const { buff } = JSON.parse(e.data)
       download(buff)
     }
-    eventSource.current = new EventSource(`http://localhost:8080/api/patents/${props.company}/events`)
+    eventSource.current = new EventSource(`${baseURL}/patents/${props.company}/events`)
 
     eventSource.current.addEventListener('UPDATE', logger)
     eventSource.current.addEventListener('DATA', donwloadHandler)
@@ -98,7 +59,7 @@ const Download = props => {
   }, [])
 
   return (
-    <BatchUploadProgress
+    <ProgressIndicator
       spring={spring}
       title={message}
       progress={progress}

@@ -61,15 +61,9 @@ const navPaths: NavLinkProps[] = [
 
 function NavLink({ display, path, ...rest }: NavLinkProps) {
   const isMatch = useRouteMatch(path)
-  const isResume = path === '/static/media/Resume.pdf' && display === 'RESUME'
+
   return (
-    <TextLink
-      {...rest}
-      to={path}
-      matches={isMatch && isMatch.isExact}
-      as={isResume ? 'a' : undefined}
-      href={isResume ? '/static/media/Resume.pdf' : undefined}
-    >
+    <TextLink {...rest} to={path} matches={isMatch && isMatch.isExact}>
       {display}
     </TextLink>
   )
