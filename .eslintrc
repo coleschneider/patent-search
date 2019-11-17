@@ -40,6 +40,8 @@
     "no-case-declarations": "off",
     "no-prototype-builtins": "off",
     "import/no-cycle": "off",
+    "no-bitwise": "off",
+    "no-plusplus":"off",
     /**
      * @bug?
      * "import/export" temporary disable.

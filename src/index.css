@@ -354,44 +354,6 @@ ul {
   align-items: center;
 }
 
-.batch-upload-progress__float-bottom-right {
-  position: fixed;
-  
-  bottom: 0;
-  right: 0;
-  margin: 24px 12px;
-}
-
-.batch-upload-progress__container {
-  display: flex;
-  background-color: #2196f3;
-  align-items: center;
-  border-radius: 48px;
-  padding: 4px;
-  box-shadow:0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
-  color: white;
-  position: fixed;
-  bottom: 10px;
-  right: 5px;
-}
-
-.batch-upload-progress__title-container {
-  display: flex;
-  flex-direction: column;
-  margin-left: 24px;
-  margin-right: 48px;
-}
-
-.batch-upload-progress__title {
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.batch-upload-progress__description {
-  font-size: 14px;
-  margin-top: 4px;
-}
-
 
 .search-box {
   transition: width 0.6s, border-radius 0.6s, background 0.6s, box-shadow 0.6s;
