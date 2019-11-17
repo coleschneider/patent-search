@@ -29,9 +29,9 @@ const Circle = styled.div`
 
 function Spinner() {
   return (
-    <Container>
-      <Circle />
-    </Container>
+    // <Container>
+    <Circle />
+    // </Container>
   )
 }
 export default Spinner

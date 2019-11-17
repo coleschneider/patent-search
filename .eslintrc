@@ -37,7 +37,9 @@
     "@typescript-eslint/camelcase": "off",
     "import/no-named-as-default": "off",
     "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/*.test.ts", "**/*.test.tsx", "src/setupTests.ts" ]}],
-
+    "no-case-declarations": "off",
+    "no-prototype-builtins": "off",
+    "import/no-cycle": "off",
     /**
      * @bug?
      * "import/export" temporary disable.

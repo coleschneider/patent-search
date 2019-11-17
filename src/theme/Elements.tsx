@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled, { css, StyledComponent } from 'styled-components'
 import { Link, LinkProps } from 'react-router-dom'
 import { Colors, primaryGradient, secondaryGradient, withHover } from './colors'
 import Icons from './Icons'
@@ -94,6 +94,71 @@ export const ExternalBLink = styled.a`
   ${buttonStyles}
 `
 
+const MessageStyles = styled.div`
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+`
+type MessageTypes = 'Info' | 'Success' | 'Warning' | 'Error'
+type Icons = 'fa fa-check' | 'fa fa-info-circle' | 'fa fa-warning' | 'fa fa-times-circle'
+type Mess = { [key in MessageTypes]: ({ children }: { children: React.ReactNode }) => JSX.Element }
+
+const MessageType = {
+  Info: {
+    component: styled(MessageStyles)`
+      color: #059;
+      background-color: #bef;
+    `,
+    icon: 'fa fa-info-circle',
+  },
+  Warning: {
+    component: styled(MessageStyles)`
+      color: #9f6000;
+      background-color: #feefb3;
+    `,
+    icon: 'fa fa-warning',
+  },
+  Success: {
+    component: styled(MessageStyles)`
+      color: #270;
+      background-color: #dff2bf;
+    `,
+    icon: 'fa fa-check',
+  },
+  Error: {
+    component: styled(MessageStyles)`
+      color: #d8000c;
+      background-color: #ffbaba;
+    `,
+    icon: 'fa fa-times-circle',
+  },
+}
+const MessageDetails = styled.div`
+  display: flex;
+  margin-left: 1rem;
+`
+export const Bold = styled.span`
+  font-weight: 800;
+  display: contents;
+`
+export const Messages = (Object.keys(MessageType) as MessageTypes[]).reduce(
+  (acc, curr) => {
+    acc[curr] = ({ children }: { children: React.ReactNode; iconOverride: React.ReactNode }) => {
+      const { icon, component: Component } = MessageType[curr]
+
+      return (
+        <Component>
+          <i className={icon} />
+          <MessageDetails>{children}</MessageDetails>
+        </Component>
+      )
+    }
+    return acc
+  },
+
+  {} as Mess,
+)
 type BaseProps = {
   icon: Icons
   children: React.ReactNode

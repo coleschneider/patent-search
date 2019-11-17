@@ -16,7 +16,7 @@ const Item = styled.button`
   cursor: pointer;
   display: block;
   font-weight: 700;
-  padding: 15px;
+  padding: 1rem;
   width: 100%;
   &,
   &:hover {

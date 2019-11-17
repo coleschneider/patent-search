@@ -1,6 +1,6 @@
 import React from 'react'
-import { schema, normalize } from 'normalizr'
 import * as _ from 'lodash'
+import paginate from './paginate'
 import { companySearch, companyPatents } from '../../utils/service'
 
 const { FETCH_COMPANIES, FETCH_COMPANIES_COMPLETE, FETCH_COMPANIES_ERROR }: CompanyActionTypes = {
@@ -18,93 +18,13 @@ const { SET_ERROR_MESSAGE, CLEAR_ERROR_MESSAGE }: ErrorMessageActionTypes = {
   CLEAR_ERROR_MESSAGE: 'CLEAR_ERROR_MESSAGE',
 }
 
-interface Paginate {
-  types: CompanyActionTypesUnion[] | PatentActionTypesUnion[]
-  mapActionToKey: (action: Actions) => string | number
-}
-
-const paginate = ({ types, mapActionToKey }: Paginate) => {
-  const [requestType, successType, failureType] = types
-  const updatePagination = (
-    state = {
-      ids: [],
-      isFetching: true,
-      errors: null,
-      page: 1,
-      count: 0,
-      total: 0,
-    },
-    action: Actions,
-  ) => {
-    switch (action.type) {
-      case requestType:
-        return {
-          ...state,
-          page: action.meta.page,
-          isFetching: true,
-        }
-      case successType:
-        return {
-          ...state,
-          count: action.payload.count,
-          total: action.payload.total,
-          // ids: [...state.ids, ...action.payload.ids],
-          ids: _.union(state.ids, action.payload.ids),
-          isFetching: false,
-        }
-      case failureType:
-        return {
-          ...state,
-          isFetching: false,
-        }
-      default:
-        return state
-    }
-  }
-  return (state: BySearchTerm<CompanyState> | BySearchTerm<PatentState>, action: Actions) => {
-    switch (action.type) {
-      case requestType:
-      case successType:
-      case failureType:
-        // eslint-disable-next-line
-        const key = mapActionToKey(action)
-        if (typeof key !== 'string') {
-          throw new Error('expecteed key to be a string')
-        }
-        return {
-          ...state,
-          [key]: updatePagination(state[key], action),
-        }
-      default:
-        return state
-    }
-  }
-}
-
 const initialState: State = {
   companySearches: {},
   patentsByCompany: {},
   errorMessage: null,
   entities: { companies: {}, patents: {} },
 }
-const companySchema = new schema.Entity(
-  'companies',
-  {},
-  {
-    idAttribute: company => {
-      return company.assignee_id
-    },
-  },
-)
-const patentSchema = new schema.Entity(
-  'patents',
-  {},
-  {
-    idAttribute: patent => {
-      return patent.patent_id
-    },
-  },
-)
+
 const companySearchesReducer = paginate({
   types: [FETCH_COMPANIES, FETCH_COMPANIES_COMPLETE, FETCH_COMPANIES_ERROR],
   mapActionToKey: (actionType: Actions) => actionType.meta.search,
@@ -117,7 +37,6 @@ const patentsByCompanyReducer = paginate({
 
 function useCompanies() {
   const entitiesReducer = (state: EntityState, action: Actions) => {
-    // eslint-disable-next-line
     if (action.hasOwnProperty('payload') && action.payload.entities) {
       return _.merge({}, state, action.payload.entities)
     }
@@ -146,7 +65,7 @@ function useCompanies() {
       meta: { page, search },
     })
 
-  const fetchCompaniesComplete = (payload, search: string, page: number) => {
+  const fetchCompaniesComplete = (payload: CompanySearchResponse, search: string, page: number) => {
     dispatch({
       type: FETCH_COMPANIES_COMPLETE,
       payload,
@@ -156,10 +75,14 @@ function useCompanies() {
       },
     })
   }
-  const fetchCompaniesError = (errors: any) =>
+  const fetchCompaniesError = (error: string, search: string, page: number) =>
     dispatch({
       type: FETCH_COMPANIES_ERROR,
-      errors,
+      error,
+      meta: {
+        search,
+        page,
+      },
     })
   const setErrorMessage = (message: string) =>
     dispatch({
@@ -175,17 +98,11 @@ function useCompanies() {
     fetchCompanies(search, page)
     try {
       const { data } = await companySearch(search, page)
-      if (!data.assignees) {
-        setErrorMessage('Not Found')
-      }
-      const { entities, result } = normalize(data.assignees || [], [companySchema])
-      fetchCompaniesComplete(
-        { ids: result, entities, count: data.count, total: data.total_assignee_count },
-        search,
-        page,
-      )
+
+      fetchCompaniesComplete(data, search, page)
     } catch (e) {
-      fetchCompaniesError(e)
+      const { response } = e
+      fetchCompaniesError(response.statusText, search, page)
     }
   }
   const fetchPatents = (companyUrl: string, search: string, page: number) =>
@@ -197,7 +114,7 @@ function useCompanies() {
         companyUrl,
       },
     })
-  const fetchPatentsComplete = (payload, companyUrl: string, search: string, page: number) =>
+  const fetchPatentsComplete = (payload: PatentSearchResponse, companyUrl: string, search: string, page: number) =>
     dispatch({
       type: FETCH_PATENTS_COMPLETE,
       payload,
@@ -207,35 +124,54 @@ function useCompanies() {
         page,
       },
     })
-  const fetchPatentsError = (error: any) =>
+  const fetchPatentsError = (error: string, companyUrl: string, search: string, page: number) =>
     dispatch({
       type: FETCH_PATENTS_ERROR,
       error,
+      meta: {
+        companyUrl,
+        search,
+        page,
+      },
     })
   const getPatentsByCompany = async (companyUrl: string, search: string, page: number) => {
     fetchPatents(companyUrl, search, page)
     try {
       const { data } = await companyPatents(search, page)
-      const { entities, result } = normalize(data.patents || [], [patentSchema])
-      fetchPatentsComplete(
-        { ids: result, entities, count: data.count, total: data.total_patent_count },
-        companyUrl,
-        search,
-        page,
-      )
+
+      fetchPatentsComplete(data, companyUrl, search, page)
     } catch (e) {
-      fetchPatentsError(e)
+      const { response } = e
+      fetchPatentsError(response.statusText, companyUrl, search, page)
     }
   }
+  const isNameCached = (search: string) => state.companySearches[search]
   const profileByCompany = (search: string) => state.companySearches[search] || { ids: [] }
   const getCompaniesById = (id: string) => state.entities.companies[id]
   const patentsByCompany = (companyUrl: string) => state.patentsByCompany[companyUrl] || { ids: [] }
   const getPatentById = (id: string) => state.entities.patents[id]
+  const fetchCompanyIfNeeded = async (search: string, page = 1) => {
+    const isCached = getCompaniesById(search)
+    if (isCached) {
+      return Promise.resolve()
+    }
+    return getCompaniesByName(search, page)
+  }
+  const getCompaniesByNameIfNeeded = async (search: string, page = 1) => {
+    const isCached = isNameCached(search)
+    if (isCached) {
+      return Promise.resolve()
+    }
+    return getCompaniesByName(search, page)
+  }
+
   return {
     state,
+    getCompaniesByNameIfNeeded,
     getCompaniesByName,
     profileByCompany,
     getCompaniesById,
+    fetchCompanyIfNeeded,
     getPatentsByCompany,
     patentsByCompany,
     getPatentById,

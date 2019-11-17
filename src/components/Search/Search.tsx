@@ -8,14 +8,16 @@ import Pagination from '../Pagination/Pagination'
 import useInput from '../../hooks/useInput/useInput'
 import useForm from '../../hooks/useForm/useForm'
 import { testValidation, lengthValidation } from '../../utils/validators'
-import InputContainer from '../Input/Input'
+import InputContainer, { SearchInput } from '../Input/Input'
 
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`
 const Input = styled.input`
   display: block;
-  min-width: 90%;
-  margin: 1em;
   padding: 1em;
-  width: 35em;
+  width: 100%;
   border-radius: 8px;
   border-style: none;
   border: 1px solid #e4e6e8;
@@ -27,6 +29,35 @@ interface FormState {
   lastName: string
   company: string
 }
+const SearchInputText = styled.input`
+  display: block;
+  padding: 1em;
+  width: 100%;
+  border-radius: 8px;
+  border-style: none;
+  border: 1px solid #e4e6e8;
+  transition: 0.1s ease;
+  width: 100%;
+  background: #ffffff;
+  color: #000000;
+  font-weight: 500;
+  transition: all 0.4s ease-in-out;
+  font-size: 14px;
+  line-height: 24px;
+  text-rendering: auto;
+  color: initial;
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-transform: none;
+  text-indent: 0px;
+  text-shadow: none;
+  display: inline-block;
+  text-align: start;
+  background-color: white;
+  cursor: text;
+  margin: 0em;
+  font: 400 11px system-ui;
+`
 function Search(props: Props) {
   const {
     match: { params },
@@ -47,24 +78,22 @@ function Search(props: Props) {
   const form = useForm<FormState>({ firstName, lastName, company }, onSubmit)
 
   return (
-    <>
-      <form>
-        <h3>Policy Patent Aggregator [BETA 1.0]</h3>
-        <InputContainer input={firstName} label="First Name">
-          <Input type="text" value={firstName.value} onChange={firstName.onChange} onBlur={firstName.onBlur} />
-        </InputContainer>
-        <InputContainer input={lastName} label="Last Name">
-          <Input type="text" value={lastName.value} onChange={lastName.onChange} onBlur={lastName.onBlur} />
-        </InputContainer>
-        <InputContainer input={company} label="Company">
-          <Input type="text" value={company.value} onChange={company.onChange} onBlur={company.onBlur} />
-        </InputContainer>
+    <Form>
+      <h3>Policy Patent Aggregator [BETA 1.0]</h3>
+      <InputContainer input={firstName} label="First Name">
+        <Input type="text" value={firstName.value} onChange={firstName.onChange} onBlur={firstName.onBlur} />
+      </InputContainer>
+      <InputContainer input={lastName} label="Last Name">
+        <Input type="text" value={lastName.value} onChange={lastName.onChange} onBlur={lastName.onBlur} />
+      </InputContainer>
+      <SearchInput input={company} label="Company">
+        <SearchInputText type="text" value={company.value} onChange={company.onChange} onBlur={company.onBlur} />
+      </SearchInput>
 
-        <button disabled={!form.isValid} onClick={form.submit} type="submit">
-          {form.isValid ? '✅' : '❌'} Submit
-        </button>
-      </form>
-    </>
+      <button disabled={!form.isValid} onClick={form.submit} type="submit">
+        {form.isValid ? '✅' : '❌'} Submit
+      </button>
+    </Form>
   )
 }
 

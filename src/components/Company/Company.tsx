@@ -4,6 +4,7 @@ import { RouteComponentProps } from 'react-router'
 import { Link } from 'react-router-dom'
 import Header from '../Collapsible/Header'
 import Collapse from '../Collapsible/Collapse'
+import { Bold } from '../../theme/Elements'
 
 const Wrapper = styled.div`
   display: flex;
@@ -31,14 +32,13 @@ const ContainerAccordion = styled.div`
     border: 0;
   }
 `
-const Content = styled.div`
-  padding: 0 15px 15px;
-
+export const Content = styled.div`
+  width: 100%;
   cursor: pointer;
   padding: 1rem;
   background-color: rgb(245, 248, 250);
 `
-const TextWrapper = styled.div`
+export const TextWrapper = styled.div`
   display: flex;
   align-items: stretch;
   box-sizing: border-box;
@@ -63,7 +63,7 @@ const TextWrapper = styled.div`
   border-color: black;
   border-image: initial;
 `
-const NameWrapper = styled.div`
+export const NameWrapper = styled.div`
   display: flex;
   align-items: stretch;
   box-sizing: border-box;
@@ -116,7 +116,7 @@ const ActionWrapper = styled.div`
   border-color: black;
   border-image: initial;
 `
-const DetailsContainer = styled.div`
+export const DetailsContainer = styled.div`
   font-weight: 400;
   color: rgb(20, 23, 26);
   font-size: 14px;
@@ -125,19 +125,19 @@ const DetailsContainer = styled.div`
   min-width: 0px;
   position: relative;
 `
-const Bold = styled.span`
-  font-weight: 800;
-  display: contents;
-`
-interface Prop extends RouteComponentProps<{ company: string }>, AssigneedDetails {}
+
+interface Prop extends RouteComponentProps<{ company: string }>, Company {}
 
 function Company({
   assignee_lastknown_country,
   assignee_last_seen_date,
   assignee_lastknown_city,
   assignee_first_seen_date,
+  assignee_id,
   assignee_total_num_patents,
   assignee_organization,
+  assignee_first_name,
+  assignee_last_name,
   match,
   index,
 }: Prop) {
@@ -166,7 +166,7 @@ function Company({
   return (
     <ContainerAccordion>
       <Header
-        title={assignee_organization}
+        title={assignee_organization || `${assignee_first_name} ${assignee_last_name}`}
         icon="down-chevron"
         id={index}
         onClick={toggleItem}
@@ -186,7 +186,7 @@ function Company({
             <DetailsContainer>{`Filings count: ${assignee_total_num_patents}`}</DetailsContainer>
           </TextWrapper>
           <ActionWrapper>
-            <Link to={`/patents/${company}/`}>See More</Link>
+            <Link to={`/patents/${assignee_id}`}>See More</Link>
           </ActionWrapper>
         </Content>
       </Collapse>

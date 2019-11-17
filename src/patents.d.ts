@@ -1,4 +1,4 @@
-interface AssigneedDetails {
+interface Company {
   assignee_first_name: string | null
   assignee_first_seen_date: string | null
   assignee_id: string
@@ -20,13 +20,15 @@ interface PaginationConfig {
   count: number
   total: number
   page: number
+  ids: string[]
 }
-
-interface CompanySearchResponse extends CompanyPaginationConfig {
-  assignees: AssigneedDetails[] | null
-  patents: PatentsById[]
+type SearchResponse<T> = CharterPaginationConfig & {
+  entities: {
+    [key: string]: T
+  }
 }
-
+type CompanySearchResponse = SearchResponse<Company>
+type PatentSearchResponse = SearchResponse<Patent>
 interface Applications {
   app_date: string
   app_id: string
@@ -135,14 +137,24 @@ type ById<T> = {
   [k: string]: T
 }
 interface EntityState {
-  companies: ById<AssigneedDetails>
+  companies: ById<Company>
   patents: ById<Patent>
 }
 type ErrorMessageState = string | null
-
+type Paginate = {
+  ids: never[]
+  isFetching: boolean
+  error: any
+  page: number
+  count: number
+  total: number
+}
+type PaginateEntity = {
+  [k: string]: Paginate
+}
 interface State {
-  companySearches: BySearchTerm<CompanyState>
-  patentsByCompany: BySearchTerm<PatentState>
+  companySearches: PaginateEntity
+  patentsByCompany: PaginateEntity
   errorMessage: ErrorMessageState
   entities: EntityState
 }

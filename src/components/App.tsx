@@ -1,7 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { Route, Switch, useRouteMatch, useLocation } from 'react-router-dom'
-
+import { Route, useRouteMatch } from 'react-router-dom'
 import { media } from '../theme/Grid/config'
 import Search from './Search/Search'
 import CompanyPage from './CompanyPage/CompanyPage'
@@ -100,6 +99,7 @@ const PrimaryColumn = styled.div`
   min-height: 100vh;
 `
 export const CompanyContext = useGlobalState(useCompanies)
+
 export default function App() {
   const isPatentPage = useRouteMatch({
     path: '/patents/:company',
@@ -115,7 +115,7 @@ export default function App() {
             <PrimaryColumn>
               <Route exact path="/:company?" component={Search} />
               <Route exact path="/:company" component={CompanyList} />
-              <Route exact path="/patents/:company" component={CompanyPage} />
+              <Route path="/patents/:company" component={CompanyPage} />
             </PrimaryColumn>
             <SecondaryColumn>
               <h3>Put something here to show on desktop vi</h3>
