@@ -7,7 +7,7 @@ import { CompanyContext } from '../App'
 import Pagination from '../Pagination/Pagination'
 import useInput from '../../hooks/useInput/useInput'
 import useForm from '../../hooks/useForm/useForm'
-import { testValidation, lengthValidation } from '../../utils/validators'
+import { emptyValidation } from '../../utils/validators'
 import InputContainer, { SearchInput } from '../Input/Input'
 
 const Form = styled.form`
@@ -63,13 +63,13 @@ function Search(props: Props) {
     match: { params },
   } = props
   const firstName = useInput('', {
-    validations: [lengthValidation, testValidation],
+    validations: [],
   })
   const lastName = useInput('', {
-    validations: [lengthValidation, testValidation],
+    validations: [],
   })
   const company = useInput(params.company || '', {
-    validations: [testValidation],
+    validations: [emptyValidation],
   })
 
   const onSubmit = async ({ values, errors }: { values: FormState }) => {
@@ -88,7 +88,6 @@ function Search(props: Props) {
       <SearchInput input={company} label="Company">
         <SearchInputText type="text" value={company.value} onChange={company.onChange} onBlur={company.onBlur} />
       </SearchInput>
-
       <button disabled={!form.isValid} onClick={form.submit} type="submit">
         {form.isValid ? '✅' : '❌'} Submit
       </button>

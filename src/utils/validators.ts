@@ -11,6 +11,11 @@ export const testValidation = (value: string): ValidationResult => {
     return 'Test values not allowed'
   }
 }
+export const emptyValidation = (value: string): ValidationResult => {
+  if (!value) {
+    return 'Field must not be blank'
+  }
+}
 
 export const asyncTruthyValidation = async (value: any): Promise<ValidationResult> => {
   await new Promise(resolve => setTimeout(resolve, 1000))
