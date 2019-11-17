@@ -61,6 +61,7 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
 const REACT_APP = /^REACT_APP_/i;
 
 function getClientEnvironment(publicUrl) {
+  const API_ENDPOINT = process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : 'https://stark-lowlands-75142.herokuapp.com'
   const raw = Object.keys(process.env)
     .filter(key => REACT_APP.test(key))
     .reduce(
@@ -77,7 +78,7 @@ function getClientEnvironment(publicUrl) {
         // This should only be used as an escape hatch. Normally you would put
         // images into the `src` and `import` them in code to get their paths.
         PUBLIC_URL: publicUrl,
-        PROXY_URL: 'https://sleepy-brushlands-77557.herokuapp.com'
+        API_ENDPOINT
       }
     );
   // Stringify all values so we can feed into Webpack DefinePlugin

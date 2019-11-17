@@ -1,8 +1,7 @@
 import axios from 'axios'
 
-const proxyUrl = process.env.PROXY_URL
-const api = 'http://webapi.patentsview.org/api'
-const baseURL = `http://localhost:8080/api`
+const apiEndpoint = process.env.API_ENDPOINT
+const baseURL = `${apiEndpoint}/api`
 const service = axios.create({
   baseURL,
 })

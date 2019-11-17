@@ -78,8 +78,7 @@ function Search(props: Props) {
   const form = useForm<FormState>({ firstName, lastName, company }, onSubmit)
 
   return (
-    <Form>
-      <h3>Policy Patent Aggregator [BETA 1.0]</h3>
+    <Form onSubmit={form.submit}>
       <InputContainer input={firstName} label="First Name">
         <Input type="text" value={firstName.value} onChange={firstName.onChange} onBlur={firstName.onBlur} />
       </InputContainer>
@@ -89,10 +88,7 @@ function Search(props: Props) {
       <SearchInput input={company} label="Company">
         <SearchInputText type="text" value={company.value} onChange={company.onChange} onBlur={company.onBlur} />
       </SearchInput>
-
-      <button disabled={!form.isValid} onClick={form.submit} type="submit">
-        {form.isValid ? '✅' : '❌'} Submit
-      </button>
+      <button type="submit" style={{ display: 'none' }} />
     </Form>
   )
 }

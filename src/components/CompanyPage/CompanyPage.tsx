@@ -143,51 +143,51 @@ function CompanyPage(props: RouteComponentProps<{ company: string }>) {
   const loadingPatents = !companyPatents || (companyPatents.isFetching && companyPatents.ids.length === 0)
   const loadingProfile = !companyProfile || (companyState.isFetching && companyState.ids.length === 0)
 
-  // if (loadingPatents || loadingProfile) {
-  const message = loadingProfile ? 'Fetching Company Profile' : 'Fetching Patents'
+  if (loadingPatents || loadingProfile) {
+    const message = loadingProfile ? 'Fetching Company Profile' : 'Fetching Patents'
+    return (
+      <Messages.Info>
+        <MessageText>{message}</MessageText>
+        <Spinner />
+      </Messages.Info>
+    )
+  }
+
   return (
-    <Messages.Info>
-      <MessageText>{message}</MessageText>
-      <Spinner />
-    </Messages.Info>
+    <div>
+      <Route path={`${path}/download`} exact>
+        <Download company={company} />
+      </Route>
+      <CompanyTitleContainer>
+        <Content>
+          <TextWrapper>
+            <NameWrapper>
+              Company Name: <Bold>{companyProfile.assignee_organization}</Bold>
+            </NameWrapper>
+            <DetailsContainer>{`Filings count: ${companyPatents.total}`}</DetailsContainer>
+          </TextWrapper>
+          <DetailsContainer>
+            <i
+              style={{ cursor: 'pointer' }}
+              className="fa fa-file-excel-o"
+              aria-hidden="true"
+              onClick={() => props.history.push(`${url}/download`)}
+            />
+          </DetailsContainer>
+        </Content>
+      </CompanyTitleContainer>
+      {companyPatents.total && <Messages.Info>Found: {companyPatents.total}</Messages.Info>}
+      {patents ? patents.map(patent => <Patent key={patent.patent_id} {...patent} />) : null}
+
+      {companyPatents.error && <Messages.Error>{companyPatents.error}</Messages.Error>}
+      {companyPatents.isFetching && <Spinner />}
+      {!companyPatents.isFetching && (
+        <LoadMore onClick={onLoadMore} disabled={!companyPatents || companyPatents.page === totalPages}>
+          Load More
+        </LoadMore>
+      )}
+    </div>
   )
-  // }
-
-  // return (
-  //   <div>
-  //     <Route path={`${path}/download`} exact>
-  //       <Download company={company} />
-  //     </Route>
-  //     <CompanyTitleContainer>
-  //       <Content>
-  //         <TextWrapper>
-  //           <NameWrapper>
-  //             Company Name: <Bold>{companyProfile.assignee_organization}</Bold>
-  //           </NameWrapper>
-  //           <DetailsContainer>{`Filings count: ${companyPatents.total}`}</DetailsContainer>
-  //         </TextWrapper>
-  //         <DetailsContainer>
-  //           <i
-  //             style={{ cursor: 'pointer' }}
-  //             className="fa fa-file-excel-o"
-  //             aria-hidden="true"
-  //             onClick={() => props.history.push(`${url}/download`)}
-  //           />
-  //         </DetailsContainer>
-  //       </Content>
-  //     </CompanyTitleContainer>
-  //     {companyPatents.total && <Messages.Info>Found: {companyPatents.total}</Messages.Info>}
-  //     {patents ? patents.map(patent => <Patent key={patent.patent_id} {...patent} />) : null}
-
-  //     {companyPatents.error && <Messages.Error>{companyPatents.error}</Messages.Error>}
-  //     {companyPatents.isFetching && <Spinner />}
-  //     {!companyPatents.isFetching && (
-  //       <LoadMore onClick={onLoadMore} disabled={!companyPatents || companyPatents.page === totalPages}>
-  //         Load More
-  //       </LoadMore>
-  //     )}
-  //   </div>
-  // )
 }
 
 export default CompanyPage
